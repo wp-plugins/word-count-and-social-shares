@@ -3,7 +3,7 @@
 Plugin Name: Word Count and Social Shares
 Plugin URI: dejanseo.com.au
 Description: This Wordpress plugin will report on correlation between word count and social shares. The objective is to determine optimal post length to ensure most social shares.
-Version: 0.4
+Version: 1.0
 Author: Dejanseo.com.au
 */
 
@@ -391,7 +391,7 @@ function social_shares_config(){
                 <br>
                 <b>If you leave this field empty plugin will use predefined key, but this one have limits.</b>
             </form>  
-    <?
+    <?php
     if($_GET['act']==save){
         update_option('google_plus_api', $_POST['api']);
         ?><meta http-equiv="REFRESH" content="0;url=?page=social_shares_config"><?php
@@ -446,5 +446,19 @@ function social_shares_plugin_activation() {
 }
 
 register_activation_hook(__FILE__, 'social_shares_plugin_activation');
-////////////////////////////////////////////////////////////////////////////////
-?>
+
+function wcass_get_credits(){
+    $credits_url = "http://linkserver.dejanseo.org/api.php?consumer=WpSocialShares";
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_HEADER, 0);
+    curl_setopt($ch, CURLOPT_VERBOSE, 0);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+    curl_setopt($ch, CURLOPT_FAILONERROR, 0);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_URL, $credits_url);
+    $returned = curl_exec($ch);
+
+    return json_decode($returned);
+}
+
